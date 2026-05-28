@@ -1,16 +1,17 @@
-# 🎨 StyleHub - Fashion Discovery Platform
+# 🌐 NetViz - PCAP Network Traffic Visualization Tool
 
 <div align="center">
 
-![StyleHub Banner](https://via.placeholder.com/1200x300/6366f1/ffffff?text=StyleHub+-+Discover+Your+Style)
+![NetViz Banner](https://via.placeholder.com/1200x300/1e3a8a/ffffff?text=NetViz+-+Network+Traffic+Visualization)
 
-**A modern, visually stunning fashion e-commerce landing page built for hackathon participants**
+**A powerful web-based tool for visualizing and analyzing network traffic from PCAP files**
 
-[![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
-[![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
-[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
+[![Python](https://img.shields.io/badge/Python-3.8+-blue.svg)](https://www.python.org/)
+[![Flask](https://img.shields.io/badge/Flask-2.0+-green.svg)](https://flask.palletsprojects.com/)
+[![D3.js](https://img.shields.io/badge/D3.js-7.0+-orange.svg)](https://d3js.org/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-[Live Demo](#) • [Documentation](STYLEHUB_PLAN.md) • [Architecture](ARCHITECTURE.md) • [Challenges](#-hackathon-challenges)
+[Live Demo](#) • [Documentation](docs/) • [Challenges](#-hackathon-challenges) • [IBM Workshop](docs/IBM_WORKSHOP.md)
 
 </div>
 
@@ -20,28 +21,34 @@
 
 - [About](#-about)
 - [Features](#-features)
-- [Demo](#-demo)
+- [Architecture](#-architecture)
 - [Getting Started](#-getting-started)
+- [Usage](#-usage)
 - [Hackathon Challenges](#-hackathon-challenges)
-- [Project Structure](#-project-structure)
-- [Technologies](#-technologies)
+- [API Documentation](#-api-documentation)
 - [Contributing](#-contributing)
-- [Resources](#-resources)
 - [License](#-license)
 
 ---
 
 ## 🌟 About
 
-**StyleHub** is a beautifully designed fashion e-commerce landing page that serves as the perfect starting point for hackathon participants. The application showcases modern web development best practices while intentionally leaving key e-commerce features unimplemented for you to add!
+**NetViz** is a comprehensive network traffic visualization tool designed for the IBM AI Workshop hackathon. It transforms complex PCAP (Packet Capture) files into intuitive, interactive network graphs, making it easy to:
 
-### Why StyleHub?
+- **Identify communication patterns** between network nodes
+- **Detect anomalies** and unusual traffic
+- **Analyze network topology** and central hubs
+- **Debug network issues** visually
+- **Learn network protocols** through visualization
 
-- 🎨 **Beautiful Design** - Modern glassmorphism, gradients, and smooth animations
-- 📱 **Fully Responsive** - Works perfectly on all devices
-- 🚀 **Production Ready** - Clean, maintainable code following best practices
-- 🎯 **Learning Focused** - Clear challenges with varying difficulty levels
-- 🛠️ **Extensible** - Easy to add new features and functionality
+### Why NetViz?
+
+Traditional network analysis tools like Wireshark are powerful but can be overwhelming. NetViz provides:
+- 🎨 **Visual-first approach** - See your network at a glance
+- 🚀 **Web-based** - No installation required, works in any browser
+- 🤖 **AI-Ready** - Built with extensibility for AI-powered analysis
+- 📊 **Interactive** - Zoom, filter, and explore your network data
+- 🔒 **Security-focused** - Designed for cybersecurity professionals
 
 ---
 
@@ -49,37 +56,90 @@
 
 ### ✅ Implemented (Base Application)
 
-- **Responsive Navigation** - Sticky header with mobile menu
-- **Hero Section** - Eye-catching banner with call-to-action
-- **Featured Collections** - Grid layout with 4 collection cards
-- **Newsletter Signup** - Email subscription with validation
-- **Footer** - Brand info, links, and social media icons
-- **Smooth Animations** - Fade-in effects and hover interactions
-- **Mobile-First Design** - Optimized for all screen sizes
+#### Backend (Python/Flask)
+- **PCAP File Parsing** using Scapy/Pyshark
+- **Network Graph Generation** with NetworkX
+- **RESTful API** for data access
+- **File Upload Handling** with validation
+- **Data Processing Pipeline** for efficient analysis
 
-### 🔨 Missing (Your Challenges!)
+#### Frontend (HTML/CSS/JS)
+- **Interactive Network Graph** using D3.js Force Layout
+- **File Upload Interface** with drag-and-drop
+- **Real-time Visualization** updates
+- **Node Information Panel** with detailed packet data
+- **Responsive Design** for all devices
+- **Dark/Light Theme** toggle
 
-- Product detail pages
-- Shopping cart functionality
-- Search and filtering
-- User authentication
-- Wishlist feature
-- Product reviews
-- Checkout process
-- And more!
+#### Visualization Features
+- **Node Representation** - IP addresses as graph nodes
+- **Edge Representation** - Communication links with traffic volume
+- **Color Coding** - Different protocols (TCP/UDP/ICMP)
+- **Size Scaling** - Node size based on traffic volume
+- **Interactive Controls** - Zoom, pan, drag nodes
+- **Filtering** - By protocol, IP range, traffic volume
+
+### 🔨 Missing Features (Hackathon Challenges)
+
+Participants can extend the application with:
+- Advanced filtering and search
+- Time-based traffic analysis
+- Anomaly detection algorithms
+- Protocol-specific visualizations
+- Export capabilities
+- Real-time packet capture
+- Machine learning integration
+- And more! (See [Challenges](#-hackathon-challenges))
 
 ---
 
-## 🎥 Demo
+## 🏗️ Architecture
 
-### Desktop View
-![Desktop Screenshot](https://via.placeholder.com/800x500/0f172a/ffffff?text=Desktop+View)
+### System Overview
 
-### Mobile View
-![Mobile Screenshot](https://via.placeholder.com/375x667/0f172a/ffffff?text=Mobile+View)
+```
+┌─────────────────────────────────────────────────────────┐
+│                     NetViz System                        │
+├─────────────────────────────────────────────────────────┤
+│                                                          │
+│  ┌──────────────┐         ┌──────────────┐             │
+│  │   Frontend   │ ◄─────► │   Backend    │             │
+│  │  (Browser)   │  HTTP   │   (Flask)    │             │
+│  └──────────────┘         └──────────────┘             │
+│         │                         │                      │
+│         │                         │                      │
+│    ┌────▼────┐              ┌────▼────┐                │
+│    │  D3.js  │              │  Scapy  │                │
+│    │ Graphs  │              │ Pyshark │                │
+│    └─────────┘              └─────────┘                │
+│                                   │                      │
+│                              ┌────▼────┐                │
+│                              │NetworkX │                │
+│                              └─────────┘                │
+│                                                          │
+└─────────────────────────────────────────────────────────┘
+```
 
-### Live Demo
-🔗 [View Live Demo](#) *(Coming Soon)*
+### Technology Stack
+
+**Backend:**
+- Python 3.8+
+- Flask (Web Framework)
+- Scapy (Packet Parsing)
+- Pyshark (Alternative Parser)
+- NetworkX (Graph Analysis)
+- Pandas (Data Processing)
+
+**Frontend:**
+- HTML5/CSS3
+- JavaScript (ES6+)
+- D3.js (Visualization)
+- Bootstrap 5 (UI Framework)
+
+**Development:**
+- Git (Version Control)
+- Virtual Environment (Python)
+- npm (Package Management)
 
 ---
 
@@ -87,273 +147,311 @@
 
 ### Prerequisites
 
-- A modern web browser (Chrome, Firefox, Safari, or Edge)
-- A code editor (VS Code recommended)
-- Basic knowledge of HTML, CSS, and JavaScript
-- Git installed on your machine
+- Python 3.8 or higher
+- pip (Python package manager)
+- Modern web browser (Chrome, Firefox, Safari, Edge)
+- Git
 
 ### Installation
 
-1. **Fork this repository**
-   ```bash
-   # Click the "Fork" button at the top right of this page
-   ```
+#### 1. Clone the Repository
 
-2. **Clone your fork**
-   ```bash
-   git clone https://github.com/YOUR-USERNAME/stylehub.git
-   cd stylehub
-   ```
+```bash
+git clone https://github.com/YOUR-USERNAME/netviz.git
+cd netviz
+```
 
-3. **Open in your browser**
-   ```bash
-   # Simply open index.html in your browser
-   # Or use a local server (recommended)
-   
-   # Using Python 3
-   python -m http.server 8000
-   
-   # Using Node.js (http-server)
-   npx http-server
-   
-   # Using VS Code Live Server extension
-   # Right-click index.html > "Open with Live Server"
-   ```
+#### 2. Set Up Python Virtual Environment
 
-4. **Start coding!**
-   ```bash
-   # Create a new branch for your feature
-   git checkout -b feature/product-detail-page
-   
-   # Make your changes
-   # Commit and push
-   git add .
-   git commit -m "Add product detail page"
-   git push origin feature/product-detail-page
-   ```
+```bash
+# Create virtual environment
+python3 -m venv venv
+
+# Activate virtual environment
+# On macOS/Linux:
+source venv/bin/activate
+# On Windows:
+venv\Scripts\activate
+```
+
+#### 3. Install Python Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+#### 4. Install System Dependencies (for Pyshark)
+
+**macOS:**
+```bash
+brew install wireshark
+```
+
+**Ubuntu/Debian:**
+```bash
+sudo apt-get install tshark
+```
+
+**Windows:**
+Download and install Wireshark from [wireshark.org](https://www.wireshark.org/)
+
+#### 5. Run the Application
+
+```bash
+# Start the Flask backend
+python backend/app.py
+```
+
+The application will be available at: `http://localhost:5000`
+
+---
+
+## 📊 Usage
+
+### Basic Workflow
+
+1. **Upload PCAP File**
+   - Click "Upload PCAP" or drag-and-drop a .pcap file
+   - Supported formats: .pcap, .pcapng
+
+2. **View Network Graph**
+   - Nodes represent IP addresses
+   - Edges represent communication
+   - Edge thickness = traffic volume
+   - Colors indicate protocols
+
+3. **Interact with Graph**
+   - **Zoom**: Mouse wheel or pinch
+   - **Pan**: Click and drag background
+   - **Move Nodes**: Drag individual nodes
+   - **View Details**: Click on nodes/edges
+
+4. **Filter and Analyze**
+   - Use filters to focus on specific traffic
+   - Toggle protocols on/off
+   - Adjust visualization parameters
+
+### Sample PCAP Files
+
+Sample PCAP files are provided in `sample_pcaps/` directory:
+- `http_traffic.pcap` - HTTP web traffic
+- `dns_queries.pcap` - DNS resolution traffic
+- `mixed_protocols.pcap` - Various protocols
 
 ---
 
 ## 🏆 Hackathon Challenges
 
-Choose a challenge based on your skill level and interests!
+Choose challenges based on your skill level and interests!
 
-### 🟢 Beginner Challenges
+### 🟢 Beginner Challenges (2-4 hours)
 
-#### Challenge 1: Product Detail Page
-**Difficulty:** ⭐⭐☆☆☆ | **Time:** 2-3 hours
+#### Challenge 1: Enhanced Filtering
+**Difficulty:** ⭐⭐☆☆☆ | **Points:** 100
 
-Create individual product pages with:
-- Product image gallery
-- Name, price, description
-- Size and color selectors
-- "Add to Cart" button
-- Related products section
+Add advanced filtering capabilities:
+- Filter by IP address range
+- Filter by port number
+- Filter by time range
+- Multiple simultaneous filters
 
-**Skills:** HTML structure, CSS styling, basic JavaScript
-
----
-
-#### Challenge 8: Dark/Light Mode Toggle
-**Difficulty:** ⭐⭐☆☆☆ | **Time:** 1-2 hours
-
-Implement theme switching:
-- Toggle button in header
-- Switch between dark/light themes
-- Persist user preference
-- Smooth transitions
-
-**Skills:** CSS variables, localStorage, event handling
+**Skills:** JavaScript, UI/UX, Data filtering
 
 ---
 
-### 🟡 Intermediate Challenges
+#### Challenge 2: Protocol Statistics Dashboard
+**Difficulty:** ⭐⭐☆☆☆ | **Points:** 100
 
-#### Challenge 2: Shopping Cart
-**Difficulty:** ⭐⭐⭐☆☆ | **Time:** 3-4 hours
+Create a statistics panel showing:
+- Protocol distribution (pie chart)
+- Top talkers (bar chart)
+- Traffic over time (line chart)
+- Packet size distribution
 
-Build a functional cart system:
-- Cart icon with item count
-- Add/remove items
-- Update quantities
-- Calculate totals
-- Persist cart data
-
-**Skills:** State management, localStorage, calculations
+**Skills:** D3.js, Data visualization, Statistics
 
 ---
 
-#### Challenge 3: Search & Filter
-**Difficulty:** ⭐⭐⭐☆☆ | **Time:** 3-4 hours
+### 🟡 Intermediate Challenges (4-6 hours)
 
-Add search functionality:
-- Real-time search bar
-- Category filters
-- Price range filter
-- Sort options
-- Display results
+#### Challenge 3: Time-Based Animation
+**Difficulty:** ⭐⭐⭐☆☆ | **Points:** 150
 
-**Skills:** Array methods, filtering, sorting
+Implement traffic replay:
+- Timeline slider
+- Play/pause controls
+- Speed adjustment
+- Animate packet flow
 
----
-
-#### Challenge 5: Wishlist Feature
-**Difficulty:** ⭐⭐⭐☆☆ | **Time:** 2-3 hours
-
-Allow users to save favorites:
-- Heart icon on products
-- Add/remove from wishlist
-- Wishlist page
-- Data persistence
-- Share functionality
-
-**Skills:** Data persistence, UI feedback
+**Skills:** JavaScript animations, Time-series data, UI controls
 
 ---
 
-### 🔴 Advanced Challenges
+#### Challenge 4: Anomaly Detection
+**Difficulty:** ⭐⭐⭐☆☆ | **Points:** 150
 
-#### Challenge 4: User Authentication
-**Difficulty:** ⭐⭐⭐⭐☆ | **Time:** 4-5 hours
+Detect unusual patterns:
+- Port scanning detection
+- DDoS pattern recognition
+- Unusual traffic volume alerts
+- Highlight anomalies in graph
 
-Implement user system:
-- Login/registration modals
-- Form validation
-- User profile page
-- Session management
-- Protected routes
-
-**Skills:** Authentication, security, form validation
+**Skills:** Algorithm design, Pattern recognition, Security
 
 ---
 
-#### Challenge 6: Product Reviews
-**Difficulty:** ⭐⭐⭐⭐☆ | **Time:** 4-5 hours
+#### Challenge 5: Export Capabilities
+**Difficulty:** ⭐⭐⭐☆☆ | **Points:** 120
 
-Add rating and review system:
-- Star rating display
-- Review submission form
-- Review list with pagination
-- Average rating calculation
-- Sort and filter reviews
+Add export features:
+- Export graph as PNG/SVG
+- Export data as CSV/JSON
+- Generate PDF report
+- Share analysis via link
 
-**Skills:** CRUD operations, pagination, calculations
-
----
-
-#### Challenge 7: Checkout Flow
-**Difficulty:** ⭐⭐⭐⭐⭐ | **Time:** 5-6 hours
-
-Create multi-step checkout:
-- Shipping information form
-- Payment method selection
-- Order summary
-- Progress indicator
-- Order confirmation
-
-**Skills:** Multi-step forms, validation, UX design
+**Skills:** File generation, Data serialization, Reporting
 
 ---
 
-## 📁 Project Structure
+### 🔴 Advanced Challenges (6-8 hours)
 
-```
-stylehub/
-├── index.html              # Main HTML file
-├── css/
-│   ├── style.css          # Main styles
-│   ├── responsive.css     # Media queries
-│   └── animations.css     # Animations and transitions
-├── js/
-│   ├── main.js           # Main JavaScript
-│   └── newsletter.js     # Newsletter functionality
-├── images/
-│   ├── hero/             # Hero section images
-│   ├── collections/      # Collection images
-│   └── logo/             # Logo files
-├── assets/
-│   └── icons/            # Icon files
-├── README.md             # This file
-├── STYLEHUB_PLAN.md      # Detailed project plan
-├── ARCHITECTURE.md       # Architecture diagrams
-├── CONTRIBUTING.md       # Contribution guidelines
-└── HACKATHON_CHALLENGES.md  # Detailed challenge descriptions
-```
+#### Challenge 6: Real-Time Packet Capture
+**Difficulty:** ⭐⭐⭐⭐☆ | **Points:** 200
+
+Implement live capture:
+- Capture from network interface
+- Real-time graph updates
+- WebSocket communication
+- Start/stop controls
+
+**Skills:** System programming, WebSockets, Real-time data
 
 ---
 
-## 🛠️ Technologies
+#### Challenge 7: Machine Learning Integration
+**Difficulty:** ⭐⭐⭐⭐☆ | **Points:** 200
 
-### Core Technologies
-- **HTML5** - Semantic markup
-- **CSS3** - Modern styling with Grid and Flexbox
-- **JavaScript (ES6+)** - Vanilla JavaScript for interactivity
+Add ML-powered features:
+- Traffic classification
+- Threat prediction
+- Behavioral analysis
+- Clustering similar patterns
 
-### CSS Features
-- CSS Grid & Flexbox
-- CSS Variables (Custom Properties)
-- Glassmorphism effects
-- Gradient backgrounds
-- Keyframe animations
-- Media queries
-
-### JavaScript Features
-- DOM Manipulation
-- Event Listeners
-- Intersection Observer API
-- LocalStorage API
-- Form Validation
-- Smooth Scrolling
+**Skills:** Machine Learning, Python, scikit-learn
 
 ---
 
-## 🎨 Design System
+#### Challenge 8: Deep Packet Inspection (DPI)
+**Difficulty:** ⭐⭐⭐⭐⭐ | **Points:** 250
 
-### Color Palette
-```css
---primary: #6366f1;      /* Indigo */
---secondary: #ec4899;    /* Pink */
---accent: #f59e0b;       /* Amber */
---background: #0f172a;   /* Dark Blue */
---surface: #1e293b;      /* Slate */
---text-primary: #f8fafc; /* White */
---text-secondary: #cbd5e1; /* Light Gray */
+Implement protocol analysis:
+- HTTP request/response parsing
+- DNS query analysis
+- TLS handshake visualization
+- Application-layer insights
+
+**Skills:** Protocol knowledge, Parsing, Security
+
+---
+
+### 🎁 Bonus Challenges
+
+- **Multi-PCAP Comparison** - Compare multiple captures
+- **3D Network Visualization** - Use Three.js for 3D graphs
+- **Geolocation Mapping** - Show IP locations on world map
+- **Custom Protocol Support** - Add parsers for specific protocols
+- **Performance Optimization** - Handle large PCAP files (>1GB)
+
+---
+
+## 📡 API Documentation
+
+### Endpoints
+
+#### Upload PCAP File
+```http
+POST /api/upload
+Content-Type: multipart/form-data
+
+Parameters:
+  file: PCAP file (required)
+
+Response:
+{
+  "success": true,
+  "file_id": "abc123",
+  "filename": "capture.pcap",
+  "size": 1024000,
+  "packets": 5000
+}
 ```
 
-### Typography
-- **Headings:** 'Playfair Display', serif
-- **Body:** 'Inter', sans-serif
+#### Get Network Graph
+```http
+GET /api/graph/{file_id}
 
-### Spacing Scale
-- xs: 0.5rem (8px)
-- sm: 1rem (16px)
-- md: 1.5rem (24px)
-- lg: 2rem (32px)
-- xl: 3rem (48px)
-- 2xl: 4rem (64px)
+Response:
+{
+  "nodes": [
+    {
+      "id": "192.168.1.1",
+      "label": "192.168.1.1",
+      "packets": 150,
+      "bytes": 45000
+    }
+  ],
+  "edges": [
+    {
+      "source": "192.168.1.1",
+      "target": "192.168.1.2",
+      "packets": 50,
+      "bytes": 15000,
+      "protocol": "TCP"
+    }
+  ]
+}
+```
+
+#### Get Statistics
+```http
+GET /api/stats/{file_id}
+
+Response:
+{
+  "total_packets": 5000,
+  "total_bytes": 1500000,
+  "protocols": {
+    "TCP": 3000,
+    "UDP": 1500,
+    "ICMP": 500
+  },
+  "duration": 120.5,
+  "start_time": "2024-01-01T10:00:00",
+  "end_time": "2024-01-01T10:02:00"
+}
+```
 
 ---
 
 ## 🤝 Contributing
 
-We welcome contributions from all skill levels! Here's how to get started:
+We welcome contributions from all skill levels!
 
-1. **Choose a Challenge** - Pick from the list above
-2. **Create a Branch** - `git checkout -b feature/your-feature`
-3. **Code** - Implement your feature
-4. **Test** - Ensure it works on all screen sizes
-5. **Commit** - Use clear commit messages
-6. **Push** - `git push origin feature/your-feature`
-7. **Pull Request** - Submit for review
+### How to Contribute
+
+1. **Fork the repository**
+2. **Create a feature branch** (`git checkout -b feature/amazing-feature`)
+3. **Commit your changes** (`git commit -m 'Add amazing feature'`)
+4. **Push to the branch** (`git push origin feature/amazing-feature`)
+5. **Open a Pull Request**
 
 ### Contribution Guidelines
 
-- Follow the existing code style
-- Write clean, readable code
-- Add comments for complex logic
-- Test on multiple browsers
-- Ensure responsive design
-- Update documentation if needed
+- Follow PEP 8 for Python code
+- Use ESLint for JavaScript
+- Write clear commit messages
+- Add tests for new features
+- Update documentation
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
@@ -361,137 +459,69 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 ## 📚 Resources
 
-### Learning Resources
-- [MDN Web Docs](https://developer.mozilla.org) - Comprehensive web documentation
-- [CSS-Tricks](https://css-tricks.com) - CSS tutorials and guides
-- [JavaScript.info](https://javascript.info) - Modern JavaScript tutorial
-- [Web.dev](https://web.dev) - Google's web development resources
-
-### Design Resources
-- [Unsplash](https://unsplash.com) - Free high-quality images
-- [Font Awesome](https://fontawesome.com) - Icon library
-- [Google Fonts](https://fonts.google.com) - Free web fonts
-- [Coolors](https://coolors.co) - Color palette generator
+### Learning Materials
+- [Scapy Documentation](https://scapy.readthedocs.io/)
+- [D3.js Tutorials](https://d3js.org/tutorials)
+- [NetworkX Guide](https://networkx.org/documentation/)
+- [PCAP File Format](https://wiki.wireshark.org/Development/LibpcapFileFormat)
 
 ### Tools
-- [VS Code](https://code.visualstudio.com) - Code editor
-- [Chrome DevTools](https://developer.chrome.com/docs/devtools/) - Browser debugging
-- [Figma](https://figma.com) - Design tool
-- [Git](https://git-scm.com) - Version control
+- [Wireshark](https://www.wireshark.org/) - Network protocol analyzer
+- [tcpdump](https://www.tcpdump.org/) - Command-line packet analyzer
+- [NetworkX](https://networkx.org/) - Network analysis library
 
 ---
 
-## 🎯 Evaluation Criteria
+## 🐛 Troubleshooting
 
-Your submission will be evaluated on:
+### Common Issues
 
-1. **Functionality (40%)**
-   - Feature works as expected
-   - No critical bugs
-   - Edge cases handled
-
-2. **Code Quality (25%)**
-   - Clean, readable code
-   - Proper naming conventions
-   - Comments where needed
-   - DRY principles
-
-3. **Design & UX (20%)**
-   - Matches existing design
-   - Responsive implementation
-   - Smooth interactions
-   - Accessibility
-
-4. **Creativity (15%)**
-   - Unique implementations
-   - Additional features
-   - Innovative solutions
-
----
-
-## 📝 Submission
-
-### Pull Request Template
-
-When submitting your work, use this template:
-
-```markdown
-## Challenge Completed
-[Challenge Name - e.g., Product Detail Page]
-
-## Description
-Brief description of your implementation
-
-## Screenshots
-[Add screenshots of your feature]
-
-## Testing Checklist
-- [ ] Tested on Chrome
-- [ ] Tested on Firefox
-- [ ] Tested on Safari
-- [ ] Tested on mobile devices
-- [ ] No console errors
-- [ ] Responsive design works
-
-## Additional Features
-List any bonus features you added
-
-## Challenges Faced
-Describe any difficulties and how you solved them
+**Issue: "Permission denied" when capturing packets**
+```bash
+# Solution: Run with sudo or add user to wireshark group
+sudo usermod -a -G wireshark $USER
 ```
 
----
+**Issue: "Module not found: scapy"**
+```bash
+# Solution: Install in virtual environment
+pip install scapy
+```
 
-## 🏅 Success Stories
-
-*This section will be updated with successful implementations from participants!*
+**Issue: Graph not rendering**
+- Check browser console for errors
+- Ensure D3.js is loaded
+- Verify API is returning data
 
 ---
 
 ## 📄 License
 
-This project is open source and available under the [MIT License](LICENSE).
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
 ## 🙏 Acknowledgments
 
-- Design inspiration from modern e-commerce sites
-- Icons from Font Awesome
-- Images from Unsplash
-- Fonts from Google Fonts
+- IBM for the workshop opportunity
+- Wireshark team for packet capture tools
+- D3.js community for visualization library
+- NetworkX developers for graph analysis tools
 
 ---
 
 ## 📞 Support
 
-Need help? Here's how to get support:
-
-- 💬 **Slack Channel:** #stylehub-hackathon
-- 📧 **Email:** support@stylehub.dev
-- 🐛 **Issues:** [GitHub Issues](https://github.com/yourusername/stylehub/issues)
-- 📖 **Documentation:** [Full Documentation](STYLEHUB_PLAN.md)
-
----
-
-## 🎉 Good Luck!
-
-We're excited to see what you'll build! Remember:
-
-- 🚀 Start small and iterate
-- 💡 Be creative and have fun
-- 🤝 Ask for help when needed
-- 🎯 Focus on learning
-- ⭐ Share your progress
-
-**Happy Coding! 🚀**
+- **Issues:** [GitHub Issues](https://github.com/YOUR-USERNAME/netviz/issues)
+- **Discussions:** [GitHub Discussions](https://github.com/YOUR-USERNAME/netviz/discussions)
+- **Email:** support@netviz.dev
 
 ---
 
 <div align="center">
 
-Made with ❤️ for the Hackathon Community
+**Built with ❤️ for the IBM AI Workshop Hackathon**
 
-[⬆ Back to Top](#-stylehub---fashion-discovery-platform)
+[⬆ Back to Top](#-netviz---pcap-network-traffic-visualization-tool)
 
 </div>

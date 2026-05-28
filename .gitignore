@@ -1,64 +1,73 @@
-# StyleHub - Git Ignore File
+# NetViz - Git Ignore File
 
-# Operating System Files
-.DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
-Thumbs.db
-Desktop.ini
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
-# Editor Files
+# Virtual Environment
+venv/
+ENV/
+env/
+.venv
+
+# Flask
+instance/
+.webassets-cache
+
+# Uploads
+backend/uploads/
+uploads/
+
+# IDE
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
-.project
-.settings/
-*.sublime-project
-*.sublime-workspace
-
-# Node.js (if added later)
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-package-lock.json
-yarn.lock
-
-# Environment Variables
-.env
-.env.local
-.env.development
-.env.test
-.env.production
-
-# Build Output (if build process added)
-dist/
-build/
-out/
+.DS_Store
 
 # Logs
-logs/
 *.log
+logs/
 
-# Temporary Files
-tmp/
-temp/
-*.tmp
-
-# Cache
-.cache/
-.parcel-cache/
+# Environment variables
+.env
+.env.local
 
 # Testing
-coverage/
-.nyc_output/
+.pytest_cache/
+.coverage
+htmlcov/
 
-# Misc
+# Sample PCAP files (optional - uncomment if you don't want to track them)
+# sample_pcaps/*.pcap
+# sample_pcaps/*.pcapng
+
+# Node modules (if added later)
+node_modules/
+package-lock.json
+
+# Temporary files
+*.tmp
 *.bak
 *.orig
 
