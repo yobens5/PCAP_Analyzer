@@ -4,7 +4,7 @@
  */
 
 // API Configuration
-const API_BASE_URL = 'http://localhost:5000/api';
+const API_BASE_URL = 'http://localhost:5001/api';
 
 /**
  * Upload PCAP file to server
@@ -178,6 +178,50 @@ async function checkHealth() {
         console.error('Health check error:', error);
         throw error;
     }
+/**
+ * List available sample PCAP files
+ * @returns {Promise<Object>} List of sample files
+ */
+async function listSamples() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/samples`);
+        
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || 'Failed to list samples');
+        }
+        
+        return await response.json();
+        
+    } catch (error) {
+        console.error('List samples error:', error);
+        throw error;
+    }
+}
+
+/**
+ * Load a sample PCAP file
+ * @param {string} filename - Sample filename to load
+ * @returns {Promise<Object>} Processed file data
+ */
+async function loadSample(filename) {
+    try {
+        const response = await fetch(`${API_BASE_URL}/load-sample/${filename}`, {
+            method: 'POST'
+        });
+        
+        if (!response.ok) {
+            const error = await response.json();
+            throw new Error(error.error || 'Failed to load sample');
+        }
+        
+        return await response.json();
+        
+    } catch (error) {
+        console.error('Load sample error:', error);
+        throw error;
+    }
+}
 }
 
 // Export API functions
@@ -188,7 +232,9 @@ window.API = {
     getPackets,
     listFiles,
     deleteFile,
-    checkHealth
+    checkHealth,
+    listSamples,
+    loadSample
 };
 
 // Made with Bob

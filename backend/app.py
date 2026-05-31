@@ -60,6 +60,89 @@ def health_check():
     })
 
 
+@app.route('/api/samples', methods=['GET'])
+def list_samples():
+    """List available sample PCAP files"""
+    try:
+        sample_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'sample_pcaps')
+        samples = []
+        
+        if os.path.exists(sample_dir):
+            for filename in os.listdir(sample_dir):
+                if filename.endswith(('.pcap', '.pcapng', '.cap')):
+                    filepath = os.path.join(sample_dir, filename)
+                    file_size = os.path.getsize(filepath)
+                    samples.append({
+                        'name': filename,
+                        'size': file_size,
+                        'size_mb': round(file_size / (1024 * 1024), 2)
+                    })
+        
+        return jsonify({'samples': samples})
+    except Exception as e:
+        logger.error(f"Error listing samples: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/load-sample/<filename>', methods=['POST'])
+def load_sample(filename):
+    """Load a sample PCAP file"""
+    try:
+        # Security: validate filename
+        if not filename.endswith(('.pcap', '.pcapng', '.cap')):
+            return jsonify({'error': 'Invalid file type'}), 400
+        
+        # Get sample file path
+        sample_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'sample_pcaps')
+        filepath = os.path.join(sample_dir, secure_filename(filename))
+        
+        if not os.path.exists(filepath):
+            return jsonify({'error': 'Sample file not found'}), 404
+        
+        # Generate unique file ID
+        file_id = str(uuid.uuid4())
+        
+        # Parse PCAP file
+        logger.info(f"Parsing sample PCAP file: {filename}")
+        parser = PcapParser(filepath)
+        packets = parser.parse()
+        
+        if not packets:
+            return jsonify({'error': 'No packets found in PCAP file'}), 400
+        
+        # Generate network graph
+        logger.info(f"Generating network graph for {len(packets)} packets")
+        graph_gen = GraphGenerator(packets)
+        graph_data = graph_gen.generate_graph()
+        
+        # Get statistics
+        stats = parser.get_statistics()
+        
+        # Store processed data
+        processed_files[file_id] = {
+            'filename': filename,
+            'packets': packets,
+            'graph': graph_data,
+            'stats': stats,
+            'timestamp': datetime.now().isoformat(),
+            'is_sample': True
+        }
+        
+        logger.info(f"Successfully processed sample file: {filename}")
+        
+        return jsonify({
+            'file_id': file_id,
+            'filename': filename,
+            'packet_count': len(packets),
+            'graph': graph_data,
+            'stats': stats
+        })
+        
+    except Exception as e:
+        logger.error(f"Error loading sample: {str(e)}")
+        return jsonify({'error': str(e)}), 500
+
+
 @app.route('/api/upload', methods=['POST'])
 def upload_file():
     """
@@ -354,7 +437,7 @@ if __name__ == '__main__':
     # Run the application
     app.run(
         host='0.0.0.0',
-        port=5000,
+        port=5001,
         debug=True
     )
 

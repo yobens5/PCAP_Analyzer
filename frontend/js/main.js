@@ -40,9 +40,12 @@ function initializeUpload() {
     const uploadArea = document.getElementById('uploadArea');
     const fileInput = document.getElementById('fileInput');
     
-    // Click to upload
-    uploadArea.addEventListener('click', () => {
-        fileInput.click();
+    // Click to upload - only on the drag area itself, not child elements
+    uploadArea.addEventListener('click', (e) => {
+        // Don't trigger if clicking on sample files section
+        if (!e.target.closest('.sample-files-section')) {
+            fileInput.click();
+        }
     });
     
     // File input change
@@ -238,19 +241,19 @@ function initializeFilters() {
  */
 function initializeControls() {
     document.getElementById('zoomIn').addEventListener('click', () => {
-        zoomGraph(1.2);
+        zoomIn();
     });
     
     document.getElementById('zoomOut').addEventListener('click', () => {
-        zoomGraph(0.8);
+        zoomOut();
     });
     
     document.getElementById('resetZoom').addEventListener('click', () => {
-        resetGraphView();
+        resetView();
     });
     
     document.getElementById('exportGraph').addEventListener('click', () => {
-        exportGraphImage();
+        exportGraph();
     });
 }
 
@@ -293,11 +296,26 @@ async function loadStatistics(fileId) {
  * Display statistics
  */
 function displayStatistics(stats) {
-    // Update summary cards
+    // Update summary cards - Row 1
     document.getElementById('totalPackets').textContent = stats.total_packets.toLocaleString();
     document.getElementById('totalBytes').textContent = formatBytes(stats.total_bytes);
     document.getElementById('uniqueIPs').textContent = stats.unique_ips;
     document.getElementById('duration').textContent = `${stats.duration}s`;
+    
+    // Update summary cards - Row 2 (New KPIs)
+    const avgPacketSize = stats.total_packets > 0 ? Math.round(stats.total_bytes / stats.total_packets) : 0;
+    document.getElementById('avgPacketSize').textContent = formatBytes(avgPacketSize);
+    
+    const packetsPerSecond = stats.duration > 0 ? Math.round(stats.total_packets / stats.duration) : 0;
+    document.getElementById('packetsPerSecond').textContent = packetsPerSecond.toLocaleString();
+    
+    // Count total connections (edges in graph)
+    const totalConnections = stats.top_talkers ? stats.top_talkers.length : 0;
+    document.getElementById('totalConnections').textContent = totalConnections;
+    
+    // Count unique protocols
+    const protocolCount = Object.keys(stats.protocols || {}).length;
+    document.getElementById('protocolCount').textContent = protocolCount;
     
     // Display protocol chart
     displayProtocolChart(stats.protocols);
@@ -433,3 +451,121 @@ window.NetViz = {
 };
 
 // Made with Bob
+
+/**
+ * Load and display sample PCAP files
+ */
+async function loadSampleFiles() {
+    const sampleFilesList = document.getElementById('sampleFilesList');
+    
+    try {
+        const response = await fetch(`${API_BASE_URL}/samples`);
+        const data = await response.json();
+        
+        if (data.samples && data.samples.length > 0) {
+            sampleFilesList.innerHTML = '';
+            
+            data.samples.forEach(sample => {
+                const col = document.createElement('div');
+                col.className = 'col-md-6';
+                
+                col.innerHTML = `
+                    <div class="sample-file-card" onclick="handleSampleFileClick('${sample.name}', event)">
+                        <div class="text-center">
+                            <div class="sample-file-icon">
+                                <i class="fas fa-file-archive"></i>
+                            </div>
+                            <div class="sample-file-name">${sample.name}</div>
+                            <div class="sample-file-size">${sample.size_mb} MB</div>
+                            <button class="btn btn-sm btn-primary mt-2">
+                                <i class="fas fa-play me-1"></i>
+                                Load Sample
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                sampleFilesList.appendChild(col);
+            });
+        } else {
+            sampleFilesList.innerHTML = `
+                <div class="col-12 text-center text-muted">
+                    <i class="fas fa-info-circle me-2"></i>
+                    No sample files available
+                </div>
+            `;
+        }
+    } catch (error) {
+        console.error('Error loading samples:', error);
+        sampleFilesList.innerHTML = `
+            <div class="col-12 text-center text-danger">
+                <i class="fas fa-exclamation-triangle me-2"></i>
+                Failed to load sample files
+            </div>
+        `;
+    }
+}
+
+/**
+ * Handle sample file click
+ */
+async function handleSampleFileClick(filename, event) {
+    event.stopPropagation();
+    event.preventDefault();
+    
+    const card = event.currentTarget;
+    card.classList.add('loading');
+    
+    try {
+        showNotification(`Loading ${filename}...`, 'info');
+        
+        // Show progress
+        const progressDiv = document.getElementById('uploadProgress');
+        const progressBar = document.getElementById('progressBar');
+        const progressText = document.getElementById('progressText');
+        
+        progressDiv.style.display = 'block';
+        progressBar.style.width = '50%';
+        progressText.textContent = 'Processing sample file...';
+        
+        // Load sample file
+        const response = await fetch(`${API_BASE_URL}/load-sample/${filename}`, {
+            method: 'POST'
+        });
+        const data = await response.json();
+        
+        if (!response.ok) {
+            throw new Error(data.error || 'Failed to load sample');
+        }
+        
+        // Update progress
+        progressBar.style.width = '100%';
+        progressText.textContent = 'Complete!';
+        
+        // Store data
+        currentFileId = data.file_id;
+        currentGraphData = data.graph;
+        
+        // Display results
+        displayFileInfo(data);
+        renderGraph(data.graph);
+        displayStatistics(data.stats);
+        
+        // Hide progress after delay
+        setTimeout(() => {
+            progressDiv.style.display = 'none';
+            progressBar.style.width = '0%';
+        }, 1000);
+        
+        showNotification(`Successfully loaded ${filename}`, 'success');
+        
+    } catch (error) {
+        console.error('Error loading sample:', error);
+        showNotification(`Failed to load ${filename}: ${error.message}`, 'danger');
+        
+        const progressDiv = document.getElementById('uploadProgress');
+        progressDiv.style.display = 'none';
+    } finally {
+        card.classList.remove('loading');
+    }
+}

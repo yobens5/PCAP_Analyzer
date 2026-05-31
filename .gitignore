@@ -35,6 +35,11 @@ instance/
 
 # Uploads
 backend/uploads/
+# Sample PCAP files (too large for git)
+sample_pcaps/*.pcap
+sample_pcaps/*.pcapng
+sample_pcaps/*.cap
+!sample_pcaps/README.md
 uploads/
 
 # IDE
